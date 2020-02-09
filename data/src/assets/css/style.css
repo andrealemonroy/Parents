@@ -1,0 +1,284 @@
+@font-face {
+  font-family: Montserrat-light;
+  src: url("../fonts/Montserrat-Light_0.otf");
+}
+
+@font-face {
+  font-family: Montserrat-semibold;
+  src: url("../fonts/Montserrat-SemiBold.otf");
+}
+
+@font-face {
+  font-family: Montserrat-bold;
+  src: url("../fonts/Montserrat-Bold_0.otf");
+}
+
+@font-face {
+  font-family: Montserrat-extrabold;
+  src: url("../fonts/Montserrat-ExtraBold.otf");
+}
+
+.f-right {
+  float: right;
+}
+
+body {
+  background-color: #fcfeff;
+}
+
+.center {
+  text-align: center;
+  margin: auto;
+}
+
+.vertical-middle {
+  vertical-align: middle;
+  margin: auto 0;
+}
+h1 {
+  font-family: "Montserrat-bold";
+}
+.ivu-btn {
+  background-color: #338dc8;
+  color: #ffffff;
+  border-radius: 30px;
+  width: 180px;
+  height: 48px;
+  font-size: 14px;
+  vertical-align: center;
+}
+
+.mt-60 {
+  margin-top: 60px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+
+.font-20 {
+  font-size: 20px;
+}
+
+.ivu-form-item-label {
+  font-size: 22;
+  font-family: "Montserrat-light";
+}
+
+.ivu-input {
+  height: 48px;
+  font-size: 24px;
+  font-family: "Montserrat-light";
+}
+
+.ivu-select {
+  height: 48px !important;
+  font-size: 24px;
+  /* line-height: 48px !important; */
+  font-family: "Montserrat-light";
+}
+
+.ivu-radio-wrapper {
+  font-size: 24px;
+  font-family: "Montserrat-light";
+}
+
+.scroll {
+  overflow-x: scroll;
+  width: 90vw;
+  height: 90vh;
+  line-height: 1.5;
+}
+
+.justify {
+  text-align: justify;
+}
+
+#ticket-div {
+  display: none !important;
+}
+#ticket {
+  font-family: "Montserrat-light" !important;
+  text-decoration: none;
+  padding: 6px 12px;
+  background: #fff;
+  color: #338dc8;
+  border: 2px dashed #338dc8;
+  font-weight: bold;
+  position: relative;
+  display: inline-block;
+  margin: 10px 10px 10px 0;
+  max-width: 150px !important;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.25;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 0.35em;
+}
+
+table th,
+table td {
+  padding: 0.625em;
+  text-align: center;
+}
+
+table th {
+  font-size: 0.85em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+.ivu-date-picker {
+  width: 100%;
+}
+
+.ivu-picker-panel-body {
+  display: none;
+}
+.delete {
+  padding: 10px 20px;
+  background-color: #ed4014 !important;
+  color: black;
+  border-radius: 30px;
+  font-family: "Montserrat-light";
+}
+
+.return {
+  width: 180px;
+  height: 48px;
+  background-color: #000 !important;
+  color: #fff;
+  border-radius: 30px;
+  font-family: "Montserrat-light";
+}
+
+.return:hover {
+  background-color: rgb(55, 58, 77) !important;
+}
+.list {
+  text-align: center;
+  margin: auto;
+}
+
+.header-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.total-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.table {
+  width: auto !important;
+}
+
+/* Removes the clear button from date inputs */
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+/* Removes the spin button */
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+/* Always display the drop down caret */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #2c3e50;
+}
+
+/* A few custom styles for date inputs */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  color: grey;
+  font-family: "Helvetica", arial, sans-serif;
+  font-size: 18px;
+  border: 1px solid #ecf0f1;
+  height: 48px;
+  background: #ffff;
+  padding: 5px;
+  width: -webkit-fill-available;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+input[type="date"]:focus {
+  color: grey;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
