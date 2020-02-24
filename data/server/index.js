@@ -58,6 +58,16 @@ export const getAllParents = async () => {
   return await api.get('http://localhost:1000/api/v1/fathers/')
 }
 
+export const getParentsWithFilter = async (dateFrom, dateTo) => {
+  console.log(dateFrom)
+  console.log(dateTo)
+  let json = {
+    where: {
+      and: [{date: { gt: new Date(dateFrom)}}, { date: {lt: new Date(dateTo) }}]
+    }
+  };
+  return await api.get(`http://localhost:1000/api/v1/fathers?filter=${JSON.stringify(json)}`);
+};
 
 export default api
 

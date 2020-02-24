@@ -36,6 +36,14 @@
           >
             <Button>REPORTE TOTAL</Button>
           </download-csv>
+          <div v-if="filterState" class="header-info">
+            <download-csv
+              :data="excelDataChildsAndParents(this.filtertotal)"
+              class="mt-2"
+            >
+              <Button>REPORTE FILTRO</Button>
+            </download-csv>
+          </div>
         </div>
       </div>
       <br />
@@ -49,18 +57,44 @@
               <Button>REPORTE TUTOR</Button>
             </download-csv> -->
         <div class="controls">
-          <div class="controls-filter">
-            <b-form-group class="mb-0">
-              <b-input-group size="sm">
-                <b-form-input
-                  v-model="inputFilter"
-                  type="search"
-                  id="filterInput"
-                  placeholder="Buscar"
-                ></b-form-input>
-              </b-input-group>
-            </b-form-group>
+          <div>
+            <label for="filter-range">Filtrar por fecha</label>
+            <VueHotelDatepicker
+              ref="filterRange"
+              id="filter-range"
+              :format="'MM-DD-YYYY'"
+              :minDate="'15-12-2019'"
+              :fromText="'De'"
+              :toText="'a'"
+              :confirmText="'Aplicar'"
+              :weekList="['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab']"
+              :monthList="[
+                'Ene.',
+                'Feb.',
+                'Mar.',
+                'Abr.',
+                'May.',
+                'Jun.',
+                'Jul.',
+                'Ago.',
+                'Sep.',
+                'Oct.',
+                'Nov.',
+                'Dic.'
+              ]"
+              resetText="borrar"
+              @confirm="confirm"
+            >
+            </VueHotelDatepicker>
+            <b-button @click="filterByDate()">Filtrar</b-button>
+            <b-button @click="clearFilterByDate()"
+              ><span v-if="clearFilter">un momento...</span
+              ><span v-else>Limpiar</span></b-button
+            >
+            <!-- <p>{{ this.dateFilter }}</p> -->
+          </div>
 
+          <div class="controls-filter">
             <b-form-group
               label="Filtrar por"
               label-size="sm"
@@ -78,33 +112,33 @@
                   >fecha de cumpleaños</b-form-checkbox
                 >
               </b-form-checkbox-group>
-              <b-input-group-append>
-                <b-button @click="filterButton(inputFilter)">Filtrar</b-button>
-                <b-button :disabled="!filter" @click="deleteFilter"
-                  >Borrar</b-button
-                >
-              </b-input-group-append>
             </b-form-group>
 
-            <div v-if="filterState" class="header-info">
-              <download-csv
-                :data="excelDataChildsAndParents(this.filtertotal)"
-                class="mt-2"
-              >
-                <Button>REPORTE FILTRO </Button>
-              </download-csv>
-            </div>
-          </div>
+            <b-form-group class="mb-0">
+              <b-input-group size="sm">
+                <b-form-input
+                  v-model="inputFilter"
+                  type="search"
+                  id="filterInput"
+                  placeholder="Buscar"
+                ></b-form-input>
+              </b-input-group>
+            </b-form-group>
 
-          <div>
-            <label for="filter-range"></label>
-            <input type="date" id="filter-range" />
+            <b-input-group-append>
+              <b-button @click="filterButton(inputFilter)">Filtrar</b-button>
+              <b-button @click="deleteFilter">Borrar </b-button>
+            </b-input-group-append>
           </div>
         </div>
 
         <div class="pagination mt-3">
           <b-form-group
             label="Por página"
+            label-cols-sm="6"
+            label-cols-md="4"
+            label-cols-lg="3"
+            label-align-sm="right"
             label-size="sm"
             label-for="perPageSelect"
             class="mb-0"
@@ -122,7 +156,6 @@
               v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
-              label-align-sm="right"
               align="fill"
               size="sm"
               class="my-0"
@@ -161,18 +194,6 @@
               {{ row.detailsShowing ? "Cerrar" : "Mostrar" }} Contrato
               <!-- Contrato -->
             </b-button>
-            <!-- <b-button size="sm">
-              <a :href="row.item.contract" target="_blank" download="myPrettyFileName.png">
-                <i class="fa fa-download" aria-hidden="true"></i>
-              </a>
-            </b-button> -->
-            <!-- <a
-              :href="row.item.contract"
-              target="_blank"
-              download="myPrettyFileName.pdf"
-            >
-            Descargar
-            </a> -->
           </template>
 
           <template v-slot:row-details="row">
@@ -219,10 +240,15 @@ import moment from "moment";
 import Vue from "vue";
 import JsonCSV from "vue-json-csv";
 Vue.component("downloadCsv", JsonCSV);
+import VueHotelDatepicker from "@northwalker/vue-hotel-datepicker";
 
 export default {
+  components: {
+    VueHotelDatepicker
+  },
   data() {
     return {
+      dateFilter: {},
       updateLoader: false,
       inputFilter: null,
       filterState: false,
@@ -317,7 +343,8 @@ export default {
         id: "info-modal",
         title: "",
         content: ""
-      }
+      },
+      clearFilter: false
     };
   },
   methods: {
@@ -327,20 +354,13 @@ export default {
       this.infoModal.content = item.childs;
       this.$root.$emit("bv::show::modal", this.infoModal.id, button);
     },
-    download(item, index, button) {
-      var browser = browser || chrome;
-      var downloading = browser.downloads.download({
-        url: item.contract,
-        filename: item.identityDocumentNumber,
-        conflictAction: "uniquify"
-      });
-    },
     resetInfoModal() {
       this.infoModal.title = "";
       this.infoModal.content = "";
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
+      this.filtertotal = null;
       this.totalRows = filteredItems.length;
       this.filtertotal = filteredItems;
       console.log(filteredItems);
@@ -500,6 +520,65 @@ export default {
         .finally(() => {
           this.showData = true;
         });
+    },
+    confirm(dateFil) {
+      this.dateFilter = dateFil;
+      console.log(this.dateFilter);
+    },
+    filterByDate() {
+      let newItems = [];
+      for (let i = 0; i < this.items.length; i++) {
+        const date = moment(this.items[i].date).format("L");
+        if (this.dateCheck(this.dateFilter.start, this.dateFilter.end, date)) {
+          newItems.push(this.items[i]);
+        }
+      }
+      console.log(newItems);
+      this.items = [];
+      this.totalRows = newItems.length;
+      this.items = newItems;
+      this.filtertotal = this.items;
+      this.filterState = true;
+      // Api.getParentsWithFilter(startDate, endDate).then(res => {
+      //   console.log(res);
+      // });
+    },
+    clearFilterByDate() {
+      this.clearFilter = true;
+      Api.getAllParents()
+        .then(res => {
+          if (res.status == 200) {
+            this.filterState = false;
+            this.clearFilter = false;
+            this.$refs.filterRange.reset();
+            this.items = [];
+            this.showData = false;
+            const payload = res.data;
+            this.items = payload;
+            this.totalRows = this.items.length;
+            for (let i = 0; i < res.data.length; i++) {
+              res.data[i].birthday = res.data[i].birthday.slice(0, 10);
+              res.data[i].date = res.data[i].date.slice(0, 10);
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.showData = true;
+        });
+    },
+    dateCheck(from, to, check) {
+      var fDate, lDate, cDate;
+      fDate = Date.parse(from);
+      lDate = Date.parse(to);
+      cDate = Date.parse(check);
+
+      if (cDate <= lDate && cDate >= fDate) {
+        return true;
+      }
+      return false;
     }
 
     // computed: {
@@ -543,7 +622,7 @@ export default {
 .controls {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .controls-filter {
