@@ -328,6 +328,12 @@ export default {
           sortable: true,
           class: "text-center"
         },
+        {
+          key: "visits",
+          label: "Visitas",
+          sortable: true,
+          class: "text-center"
+        },
         { key: "actions", label: "Contrato" }
       ],
       totalRows: 1,
@@ -403,6 +409,7 @@ export default {
       let email;
       let phoneNumber;
       let registerTime;
+      let fatherVisits;
 
       for (const item in items) {
         fatherTicket = items[item].fatherRandom;
@@ -412,6 +419,7 @@ export default {
         email = items[item].email;
         phoneNumber = items[item].phoneNumber;
         registerTime = items[item].lastDate;
+        fatherVisits = items[item].visits
 
         for (let i = 0; i < items[item].childs.length; i++) {
           if (items[item].childs[i].birthday == undefined) {
@@ -437,6 +445,7 @@ export default {
               "Correo electrónico tutor": email,
               "Celular tutor": phoneNumber,
               "Tiempo de registro(seg)": registerTime,
+              "Visitas": fatherVisits,
               "Nombre de menor": items[item].childs[i].names,
               "Apellido de menor": items[item].childs[i].surname,
               Cumpleaños: items[item].childs[i].birthday.slice(0, 10),
