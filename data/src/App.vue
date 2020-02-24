@@ -83,6 +83,7 @@
                 'Dic.'
               ]"
               resetText="borrar"
+              placeholder="Seleccione el rango de fecha"
               @confirm="confirm"
             >
             </VueHotelDatepicker>
